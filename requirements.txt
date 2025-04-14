@@ -1,5 +1,1 @@
-Flask
-flask-socketio
-eventlet
-openai
-python-dotenv
+flask==3.0.3

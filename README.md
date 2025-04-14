@@ -1,3 +1,3 @@
 # Contextual AI Core
 
-A real-time Flask app with Socket.IO support for contextual chat features.
+Prototype Flask app with a local mock chat endpoint.
