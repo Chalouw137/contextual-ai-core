@@ -1,19 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Contextual AI</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Contextual AI</title>
+    <style>
+        body { background-color: #121212; color: #fff; font-family: sans-serif; padding: 2em; }
+        #chat { border: 1px solid #555; padding: 1em; max-width: 600px; margin: auto; }
+        input, button { padding: 0.5em; margin-top: 1em; width: 100%; }
+    </style>
 </head>
 <body>
-  <div id="chat"></div>
+    <div id="chat">
+        <h2>Contextual AI Chat</h2>
+        <div id="messages"></div>
+        <input id="input" placeholder="Type a message..." />
+        <button onclick="sendMessage()">Send</button>
+    </div>
+    <script src="https://cdn.socket.io/4.3.2/socket.io.min.js"></script>
+    <script>
+        const socket = io();
+        const messages = document.getElementById("messages");
+        const input = document.getElementById("input");
 
-  <form id="input-form">
-    <input id="message-input" type="text" placeholder="Ask me anything..." autocomplete="off" />
-    <button id="submit-btn">Send</button>
-  </form>
+        socket.on("response", (data) => {
+            const msg = document.createElement("div");
+            msg.textContent = data.data;
+            messages.appendChild(msg);
+        });
 
-  <script src="{{ url_for('static', filename='app.js') }}"></script>
+        function sendMessage() {
+            const text = input.value;
+            socket.emit("message", text);
+            input.value = "";
+        }
+    </script>
 </body>
 </html>
