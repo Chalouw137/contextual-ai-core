@@ -1,31 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Real-Time Chat</title>
-  <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+    <title>Contextual AI Chat</title>
+    <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
 </head>
 <body>
-  <h1>Real-Time Chat</h1>
-  <ul id="messages"></ul>
-  <input id="message" autocomplete="off" /><button onclick="sendMessage()">Send</button>
+    <h1>Talk to AI</h1>
+    <input type="text" id="input" placeholder="Say something..." />
+    <button onclick="sendMessage()">Send</button>
+    <div id="chat"></div>
 
-  <script>
-    const socket = io();
-    const messages = document.getElementById("messages");
+    <script>
+        const socket = io();
+        const input = document.getElementById("input");
+        const chat = document.getElementById("chat");
 
-    socket.on("message", function(msg) {
-      const item = document.createElement("li");
-      item.textContent = msg;
-      messages.appendChild(item);
-    });
+        socket.on("response", function(data) {
+            const p = document.createElement("p");
+            p.innerText = data.message;
+            chat.appendChild(p);
+        });
 
-    function sendMessage() {
-      const input = document.getElementById("message");
-      socket.send(input.value);
-      input.value = "";
-    }
-  </script>
+        function sendMessage() {
+            const message = input.value;
+            socket.emit("user_message", { message: message });
+            input.value = "";
+        }
+    </script>
 </body>
 </html>
